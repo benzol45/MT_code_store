@@ -20,6 +20,16 @@ public class CodeStoreDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    public void addCode(String markCode, String productGTIN, long orderId, String orderUUID) {
+        //language=sql
+        String query = "INSERT INTO code(mark_code, product_gtin, order_id, order_uuid, sent_for_print, sent_for_apply, applied, sale) " +
+                "VALUES (?,?,?,?,false,false,false,false)";
+        int numberOfAddedRows = jdbcTemplate.update(query, markCode, productGTIN, orderId, orderUUID);
+        if (numberOfAddedRows!=1) {
+            throw new IllegalStateException("Can't add code to database");
+        }
+    }
+
     public List<Code> getForPrint() {
         //language=sql
         String query = "SELECT * FROM code WHERE sent_for_print=false";

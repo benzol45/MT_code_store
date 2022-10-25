@@ -2,6 +2,7 @@ package com.example.mt_codestore.service;
 
 import com.example.mt_codestore.DAO.CodeStoreDAO;
 import com.example.mt_codestore.DTO.CodePoolDTO;
+import com.example.mt_codestore.DTO.CodePoolFromGIS_DTO;
 import com.example.mt_codestore.entity.Code;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,11 @@ public class CodeStoreService {
 
     public CodeStoreService(CodeStoreDAO codeStoreDAO) {
         this.codeStoreDAO = codeStoreDAO;
+    }
+
+    public void receiveCodesFromGIS(CodePoolFromGIS_DTO codePool) {
+        List<String> codes = codePool.getMarkCodes();
+        codes.forEach(code -> codeStoreDAO.addCode(code, codePool.getProductGTIN(), codePool.getOrderId(), codePool.getOrderUUID()));
     }
 
     public List<CodePoolDTO> getAllNewForPrinting() {
